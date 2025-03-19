@@ -24,7 +24,7 @@ class CategoryAdmin(admin.ModelAdmin):
 ### 🔥 Admin pour les produits
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category_link', 'get_price_display', 'stock', 'created_at', 'updated_at')
+    list_display = ('name', 'get_price_display', 'stock', 'created_at', 'updated_at')
     list_filter = ('category', 'created_at', 'updated_at', 'stock')
     search_fields = ('name', 'category__name', 'description')
     ordering = ('-created_at',)
@@ -54,13 +54,6 @@ class ProductAdmin(admin.ModelAdmin):
         return "Non défini"
     get_price_display.short_description = "Plage de prix"
 
-    ### 🔥 Affichage du lien vers la catégorie
-    def category_link(self, obj):
-        if obj.category:
-            url = reverse("admin:app_category_change", args=[obj.category.id])
-            return format_html('<a href="{}">{}</a>', url, obj.category.name)
-        return "-"
-    category_link.short_description = "Catégorie"
 
     ### 🔥 Aperçu de l'image (si applicable)
     def preview_image(self, obj):
