@@ -1,90 +1,24 @@
 from django.contrib import admin
-from django.utils.html import format_html
-from django.urls import reverse
-from django.utils.safestring import mark_safe
-from .models import Product, ProductPrice, Category
+from .models import Category, Product, ProductPrice
 
-### 🔥 Inline admin pour gérer les prix directement dans l'admin
-class ProductPriceInline(admin.TabularInline):  
-    model = ProductPrice  
-    extra = 1  # Ajoute une ligne vide pour faciliter l'ajout de nouveaux prix  
-    fields = ('criteria', 'amount', 'created_at', 'updated_at')  
-
-### 🔥 Admin pour les catégories (avec affichage hiérarchique)
-@admin.register(Category)
+# Pour la catégorie (Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'parent', 'num_products')  
-    search_fields = ('name',)  
-    list_filter = ('parent',)  
+    list_display = ('name', 'parent')  # Colonnes affichées dans la liste
+    search_fields = ('name',)  # Permet de rechercher par le nom de la catégorie
 
-    def num_products(self, obj):
-        return obj.products.count()
-    num_products.short_description = "Nombre de produits"
-
-### 🔥 Admin pour les produits
-@admin.register(Product)
+# Pour le produit (Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'get_price_display', 'stock', 'created_at', 'updated_at')
-    list_filter = ('category', 'created_at', 'updated_at', 'stock')
-    search_fields = ('name', 'category__name', 'description')
-    ordering = ('-created_at',)
-    readonly_fields = ('created_at', 'updated_at', 'preview_image')
+    list_display = ('reference', 'name', 'stock', 'category', 'created_at', 'updated_at')  # Colonnes affichées dans la liste
+    search_fields = ('name', 'reference')  # Recherche par nom et référence
+    list_filter = ('category',)  # Filtrer par catégorie
+    ordering = ('-created_at',)  # Trier par date de création (descendant)
 
-    fieldsets = (
-        ("🔹 Informations générales", {
-            "fields": ("name", "description", "category", "preview_image"),
-        }),
-        ("💰 Stock et Prix", {
-            "fields": ("stock",),
-        }),
-        ("⏳ Dates", {
-            "fields": ("created_at", "updated_at"),
-        }),
-    )
+# Pour le prix du produit (ProductPrice)
+class ProductPriceAdmin(admin.ModelAdmin):
+    list_display = ('product', 'criterion', 'price')  # Colonnes affichées
+    search_fields = ('product__name', 'criterion')  # Recherche par produit et critère
 
-    inlines = [ProductPriceInline]  # Ajout des prix en inline  
-
-    ### 🔥 Affichage du range de prix
-    def get_price_display(self, obj):
-        prices = obj.prices.all()
-        if prices.exists():
-            min_price = min(p.amount for p in prices)
-            max_price = max(p.amount for p in prices)
-            return f"{min_price} - {max_price} CFA"
-        return "Non défini"
-    get_price_display.short_description = "Plage de prix"
-
-
-    ### 🔥 Aperçu de l'image (si applicable)
-    def preview_image(self, obj):
-        if hasattr(obj, "image") and obj.image:
-            return mark_safe(f'<img src="{obj.image.url}" width="100" style="border-radius: 5px;" />')
-        return "Pas d'image"
-    preview_image.short_description = "Aperçu de l'image"
-
-    ### 🔥 Empêcher la suppression des produits
-    def has_delete_permission(self, request, obj=None):
-        return False  
-
-    ### 🔥 Ajout d'une action pour exporter les produits en CSV
-    actions = ["export_as_csv"]
-
-    def export_as_csv(self, request, queryset):
-        import csv
-        from django.http import HttpResponse
-
-        response = HttpResponse(content_type="text/csv")
-        response["Content-Disposition"] = 'attachment; filename="products.csv"'
-        writer = csv.writer(response)
-
-        writer.writerow(["Nom", "Catégorie", "Prix Min", "Prix Max", "Stock", "Créé le"])
-        for product in queryset:
-            prices = product.prices.all()
-            min_price = min(p.amount for p in prices) if prices else "Non défini"
-            max_price = max(p.amount for p in prices) if prices else "Non défini"
-            writer.writerow([product.name, product.category, min_price, max_price, product.stock, product.created_at])
-
-        return response
-
-    export_as_csv.short_description = "Exporter en CSV"
-
+# Enregistrement des modèles avec les classes Admin
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Product, ProductAdmin)
+admin.site.register(ProductPrice, ProductPriceAdmin)
