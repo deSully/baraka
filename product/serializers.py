@@ -22,8 +22,20 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class CategorysSerializer(serializers.ModelSerializer):
-    subcategories = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True)
+    parent_info = serializers.SerializerMethodField()
+    subcategories_info = serializers.SerializerMethodField()
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'parent', 'subcategories']
+        fields = ['id', 'name', 'parent_info', 'subcategories_info']
+
+    def get_parent_info(self, obj):
+        """Retourne l'ID et le nom du parent si existant."""
+        if obj.parent:
+            return {'id': obj.parent.id, 'name': obj.parent.name}
+        return None
+
+    def get_subcategories_info(self, obj):
+        """Retourne l'ID et le nom de toutes les sous-catégories."""
+        subcategories = obj.subcategories.all()
+        return [{'id': subcategory.id, 'name': subcategory.name} for subcategory in subcategories]

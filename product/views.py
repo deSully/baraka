@@ -5,7 +5,7 @@ from .serializers import ProductSerializer, ProductPriceSerializer, CategorysSer
 from .models import Category
 from .filters import ProductFilter
 from django_filters.rest_framework import DjangoFilterBackend
-
+from rest_framework import generics
 from rest_framework import pagination
 
 
@@ -43,6 +43,7 @@ class ProductPriceViewSet(viewsets.ModelViewSet):
     ]  # Autorise toutes les actions CRUD
     # permission_classes = [IsAuthenticated]  # Si besoin de contrôle d'accès
 
-class CategoryViewSet(viewsets.ModelViewSet):
+
+class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorysSerializer
