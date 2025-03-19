@@ -14,6 +14,7 @@ class Category(models.Model):
         return self.name
 
 class Product(models.Model):
+    reference = models.CharField(max_length=255, unique=True, null=True)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     stock = models.IntegerField(default=0)
