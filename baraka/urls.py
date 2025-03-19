@@ -25,6 +25,7 @@ urlpatterns = [
     # Ajout des URLs des apps avec des préfixes distincts
     path("api/v0/products/", include("product.urls")),  # URLs pour les produits
     path("api/v0/orders/", include("order.urls")),  # URLs pour les commandes
+    path("api/v0/merchants/", include("merchant.urls")),  # URLs pour les marchands
     # Documentation Swagger
     path(
         "swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger-ui"
