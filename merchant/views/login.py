@@ -6,6 +6,9 @@ from merchant.models import Merchant
 
 
 class MerchantLoginView(APIView):
+
+    permission_classes = []
+
     def post(self, request, *args, **kwargs):
         phone_number = request.data.get("phone_number")
         device_id = request.data.get("device_id")
