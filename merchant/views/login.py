@@ -1,4 +1,4 @@
-from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -33,6 +33,14 @@ class MerchantLoginView(APIView):
             return Response(
                 {"error": "Device ID incorrect."}, status=status.HTTP_400_BAD_REQUEST
             )
+        
+       
+        refresh = RefreshToken.for_user(merchant)
+        return {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+        }
+
 
         # Générer un token d'authentification
         token, _ = Token.objects.get_or_create(user=merchant)
