@@ -3,8 +3,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from merchant.models import Merchant
 
+from rest_framework.permissions import AllowAny
+
 class MerchantAuthView(APIView):
     """Vue pour l'authentification d'un marchand"""
+
+    permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
         # Récupérer le device_id

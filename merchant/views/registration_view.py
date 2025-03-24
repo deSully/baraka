@@ -5,8 +5,12 @@ from merchant.models import Merchant
 import random
 import string
 
+from rest_framework.permissions import AllowAny
+
 
 class MerchantRegisterView(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request, *args, **kwargs):
         phone_number = request.data.get("phone_number")
         device_id = request.data.get("device_id")

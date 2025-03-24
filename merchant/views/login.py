@@ -3,11 +3,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from merchant.models import Merchant
+from rest_framework.permissions import AllowAny
 
 
 class MerchantLoginView(APIView):
-
-    permission_classes = []
+    permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
         phone_number = request.data.get("phone_number")
