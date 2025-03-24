@@ -21,7 +21,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.prefetch_related("prices").all()
     serializer_class = ProductSerializer
     http_method_names = ["get"]  # Autorise seulement GET
-    # permission_classes = [IsAuthenticated]  # Si tu veux un contrôle d'accès
+    permission_classes = [IsAuthenticated]  # Si tu veux un contrôle d'accès
 
     # Pagination
     pagination_class = StandardResultsSetPagination
@@ -41,7 +41,7 @@ class ProductPriceViewSet(viewsets.ModelViewSet):
         "put",
         "delete",
     ]  # Autorise toutes les actions CRUD
-    # permission_classes = [IsAuthenticated]  # Si besoin de contrôle d'accès
+    permission_classes = [IsAuthenticated]  # Si besoin de contrôle d'accès
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
