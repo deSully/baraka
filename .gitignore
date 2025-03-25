@@ -16,9 +16,6 @@ staticfiles/
 .env
 .envrc
 
-# Django Migrations
-*/migrations/*
-!*/migrations/__init__.py
 
 # Virtual Environments
 venv/
