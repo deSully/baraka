@@ -28,6 +28,7 @@ class MerchantRegisterView(APIView):
         # Générer un code d'activation
         activation_code = "".join(random.choices(string.digits, k=6))
         merchant.activation_code = activation_code
+        merchant.is_active = False
         merchant.save()
 
         # Envoyer le code (WhatsApp, SMS, etc.)

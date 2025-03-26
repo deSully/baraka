@@ -6,6 +6,7 @@ from django.db import models
 class Merchant(AbstractUser):
     phone_number = models.CharField(max_length=15, unique=True, null=True)
     device_id = models.CharField(max_length=255, unique=True, null=True)
+    activation_code = models.CharField(max_length=10, null=True, blank=True)
 
     USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = ["username", "device_id"]  # username est obligatoire avec AbstractUser
