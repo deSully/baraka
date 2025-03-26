@@ -64,7 +64,8 @@ class CreateOrderSerializer(serializers.Serializer):
                     f"Produit avec ID {product_id} introuvable."
                 )
 
-            price_at_order = product.price  # On prend le prix actuel du produit
+            # price_at_order = product.price  # On prend le prix actuel du produit
+            price_at_order = 1000
             total_price += price_at_order * quantity
 
             order_item = OrderItem(
