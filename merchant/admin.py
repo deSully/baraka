@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import Merchant
 
 class MerchantAdmin(UserAdmin):
-    list_display = ("phone_number", "username", "first_name", "last_name", "is_active", "is_staff", "is_superuser")
+    list_display = ("phone_number", "username", "first_name", "last_name", "is_active", "activation_code")
     search_fields = ("phone_number", "username", "first_name", "last_name")
     list_filter = ("is_active", "is_staff", "is_superuser")
     ordering = ("phone_number",)
