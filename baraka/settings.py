@@ -179,3 +179,16 @@ SIMPLE_JWT = {
 
 
 AUTH_USER_MODEL = "merchant.Merchant"
+
+
+# settings.py
+
+# Si tu es derrière un proxy comme nginx-proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Force l'utilisation de HTTPS pour les cookies CSRF et SESSION
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Autorise les domaines valides
+CSRF_TRUSTED_ORIGINS = ['https://barakasn.com', 'https://www.barakasn.com', 'https://backend.barakasn.com']
