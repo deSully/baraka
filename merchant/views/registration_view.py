@@ -22,7 +22,8 @@ class MerchantRegisterView(APIView):
             )
 
         merchant, _ = Merchant.objects.get_or_create(
-            phone_number=phone_number, defaults={"device_id": device_id}
+            phone_number=phone_number,
+            defaults={"device_id": device_id, "username": phone_number},
         )
 
         # Générer un code d'activation
